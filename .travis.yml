@@ -1,0 +1,20 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker image build -t react-client-test -f ./client/dev.Dockerfile ./client
+
+script:
+  - docker container run react-client-test npm run test -- --coverage
+
+after_success:
+  - docker image build -t imranaskem/complex-react-client ./client
+  - docker image build -t imranaskem/complex-node-server ./server
+  - docker image build -t imranaskem/complex-nginx ./nginx
+  - docker image build -t imranaskem/complex-node-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push imranaskem/complex-react-client
+  - docker push imranaskem/complex-node-server
+  - docker push imranaskem/complex-nginx
+  - docker push imranaskem/complex-node-worker

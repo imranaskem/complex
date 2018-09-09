@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres'
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
+  redis:
+    image: 'redis'
+  nginx:
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: dev.Dockerfile
+    ports:
+      - "3050:80"
+  node-server:
+    build:
+      context: ./server
+      dockerfile: dev.Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+  react-client:
+    build:
+      context: ./client
+      dockerfile: dev.Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+  node-worker:
+    build:
+      context: ./worker
+      dockerfile: dev.Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379

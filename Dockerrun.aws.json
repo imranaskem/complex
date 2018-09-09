@@ -5,24 +5,28 @@
             "name": "react-client",
             "image": "imranaskem/complex-react-client",
             "hostname": "react-client",
+            "memory": 128,
             "essential": false
         },
         {
             "name": "node-server",
             "image": "imranaskem/complex-node-server",
             "hostname": "node-server",
+            "memory": 128,
             "essential": false
         },
         {
             "name": "node-worker",
             "image": "imranaskem/complex-node-worker",
             "hostname": "node-worker",
+            "memory": 128,
             "essential": false
         },
         {
             "name": "nginx",
             "image": "imranaskem/complex-nginx",
             "hostname": "nginx",
+            "memory": 128,
             "essential": true,
             "portMappings": [
                 {
